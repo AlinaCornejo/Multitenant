@@ -105,7 +105,11 @@ ON_RAILWAY = os.environ.get('ON_RAILWAY', False)
 # Configuración de la base de datos (Multitenant)
 if ON_RAILWAY:
     DATABASES = {
-        'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+       'default': dj_database_url.config(
+            default=os.environ.get('DATABASE_URL'),
+            engine='django_tenants.postgresql_backend',
+            conn_max_age=600
+        )
     }
 else:
     DATABASES = {
