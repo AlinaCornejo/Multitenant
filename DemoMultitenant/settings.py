@@ -147,3 +147,4 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = '/static/'
 TENANT_MODEL = "customers.Client" 
+PUBLIC_SCHEMA_NAME = "public"
