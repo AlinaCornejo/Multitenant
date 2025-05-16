@@ -54,7 +54,7 @@ TENANT_APPS = [
 ]
 
 INSTALLED_APPS = [
-    'tenant_schemas',
+    'django_tenants',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
