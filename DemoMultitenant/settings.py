@@ -95,11 +95,14 @@ ON_RAILWAY = os.environ.get('ON_RAILWAY', False)
 
 # Configuración de la base de datos (Multitenant)
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL', 'postgres://postgres:LACS123@localhost:5432/multitenantDemo'),
-        engine='django_tenants.postgresql_backend',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django_tenants.postgresql_backend',
+        'NAME': os.environ.get('PGDATABASE', 'multitenantDemo'),
+        'USER': os.environ.get('PGUSER', 'postgres'),
+        'PASSWORD': os.environ.get('PGPASSWORD', 'LACS123'),
+        'HOST': os.environ.get('PGHOST', 'localhost'),
+        'PORT': os.environ.get('PGPORT', '5432'),
+    }
 }
 
 DATABASE_ROUTERS = (
@@ -146,5 +149,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = '/static/'
-TENANT_MODEL = "customers.Client" 
+TENANT_MODEL = "customers.Client"  # Ruta a tu modelo Tenant
+TENANT_DOMAIN_MODEL = "customers.Domain"  # Ruta a tu modelo Domain
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PUBLIC_SCHEMA_NAME = "public"
+
+
