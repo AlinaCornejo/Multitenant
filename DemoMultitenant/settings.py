@@ -34,13 +34,13 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 SHARED_APPS = [
-    'customers', 
+    'django_tenants',
+    'customers',
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
 ]
 
 TENANT_APPS = [
@@ -53,20 +53,11 @@ TENANT_APPS = [
     'django.contrib.staticfiles',
 ]
 
-INSTALLED_APPS = [
-    'django_tenants',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'customers',
-    'products',
-]
+INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 MIDDLEWARE = [
-    'django_tenants.middleware.TenantMainMiddleware',
+    'django_tenants.middleware.main.TenantMainMiddleware', 
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -103,25 +94,13 @@ WSGI_APPLICATION = 'DemoMultitenant.wsgi.application'
 ON_RAILWAY = os.environ.get('ON_RAILWAY', False)
 
 # Configuración de la base de datos (Multitenant)
-if ON_RAILWAY:
-    DATABASES = {
-       'default': dj_database_url.config(
-            default=os.environ.get('DATABASE_URL'),
-            engine='django_tenants.postgresql_backend',
-            conn_max_age=600
-        )
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django_tenants.postgresql_backend',
-            'NAME': 'multitenantDemo',
-            'USER': 'postgres',
-            'PASSWORD': 'LACS123',
-            'HOST': 'localhost',
-            'PORT': '5432',
-        }
-    }
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL', 'postgres://postgres:LACS123@localhost:5432/multitenantDemo'),
+        engine='django_tenants.postgresql_backend',
+        conn_max_age=600
+    )
+}
 
 DATABASE_ROUTERS = (
     'django_tenants.routers.TenantSyncRouter',
@@ -163,6 +142,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = '/static/'
 TENANT_MODEL = "customers.Client" 
