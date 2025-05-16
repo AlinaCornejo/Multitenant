@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView, CreateView
 from .models import Client
 from products.models import Product, Order
-from tenant_schemas.utils import tenant_context
+from django_tenants.utils import tenant_context
 
 class ClientListView(ListView):
     model = Client

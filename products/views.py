@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy, reverse
 from .models import Product, Order
-from tenant_schemas.utils import tenant_context
+from django_tenants.utils import tenant_context
 
 class ProductListView(ListView):
     model = Product
