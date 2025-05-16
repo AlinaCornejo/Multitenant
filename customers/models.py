@@ -1,5 +1,5 @@
 from django.db import models
-from django_tenants.models import TenantMixin
+from django_tenants.models import TenantMixin, DomainMixin
 
 class Client(TenantMixin):
     name = models.CharField(max_length=100)
@@ -10,3 +10,10 @@ class Client(TenantMixin):
 
     def __str__(self):
         return self.name
+        
+    class Meta:
+        verbose_name = "Client"
+        verbose_name_plural = "Clients"
+
+class Domain(DomainMixin):
+    pass
