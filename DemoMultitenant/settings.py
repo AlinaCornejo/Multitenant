@@ -66,7 +66,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'tenant_schemas.middleware.TenantMiddleware',
+    'django_tenants.middleware.TenantMainMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -110,7 +110,7 @@ if ON_RAILWAY:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'tenant_schemas.postgresql_backend',
+            'ENGINE': 'django_tenants.postgresql_backend',
             'NAME': 'multitenantDemo',
             'USER': 'postgres',
             'PASSWORD': 'LACS123',
@@ -120,7 +120,7 @@ else:
     }
 
 DATABASE_ROUTERS = (
-    'tenant_schemas.routers.TenantSyncRouter',
+    'django_tenants.routers.TenantSyncRouter',
 )
 
 
